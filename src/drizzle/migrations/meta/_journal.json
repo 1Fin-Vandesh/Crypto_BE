@@ -1,0 +1,27 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1717996634062,
+      "tag": "0000_Added_User_Profile_Table",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1717996734520,
+      "tag": "0001_Added_Exception_logs_Table",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1717996762149,
+      "tag": "0002_Added_API_Exception_logs_Table",
+      "breakpoints": true
+    }
+  ]
+}
