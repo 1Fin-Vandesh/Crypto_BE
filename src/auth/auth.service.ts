@@ -43,9 +43,9 @@ export class AuthService {
     async login(user: any) {
 
         const payload = { 
-            email_id: user.email_id, 
+            emailId: user.email_id,
             sub: {
-                user_id: user.user_id
+                userId: user.user_id
             } 
         };
 
@@ -63,9 +63,9 @@ export class AuthService {
 
     async refreshToken(user: any) {
         const payload = { 
-            email_id: user.email_id, 
+            emailId: user.email_id,
             sub: {
-                user_id: user.user_id
+                userId: user.user_id
             } 
         };
 
@@ -74,25 +74,19 @@ export class AuthService {
         };
     }
 
-    async getUserProfile(user_id: string) {
+    // async getUserProfile(user_id: string) {
 
-        return await this.drizzleService.db.query.user_profile.findFirst({
-            columns:{
-                created_at: false,
-                updated_at: false,
-                is_active: false,
-                password: false
-            },
-            where: and(
-              eq(user_profile.user_id, user_id),
-              eq(user_profile.is_active, true),
-            ),
-        })
-    }
-
-
-
-
-      
-    
+    //     return await this.drizzleService.db.query.user_profile.findFirst({
+    //         columns:{
+    //             created_at: false,
+    //             updated_at: false,
+    //             is_active: false,
+    //             password: false
+    //         },
+    //         where: and(
+    //           eq(user_profile.user_id, user_id),
+    //           eq(user_profile.is_active, true),
+    //         ),
+    //     })
+    // }
 }

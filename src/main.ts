@@ -27,7 +27,6 @@ async function bootstrap() {
   
   // app.useGlobalInterceptors(new ExceptionInterceptor());
 
-
   await app.listen(process.env.PORT || 3000);
 }
 bootstrap();

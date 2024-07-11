@@ -46,9 +46,21 @@ export class UserProfileService {
     return `This action returns a #${id} userProfile`;
   }
 
-  // update(id: number, updateUserProfileDto: UpdateUserProfileDto) {
-  //   return `This action updates a #${id} userProfile`;
-  // }
+  async getUserProfile(user_id: string) {
+
+    return await this.drizzleService.db.query.user_profile.findFirst({
+        columns:{
+            created_at: false,
+            updated_at: false,
+            is_active: false,
+            password: false
+        },
+        where: and(
+          eq(user_profile.user_id, user_id),
+          eq(user_profile.is_active, true),
+        ),
+    })
+}
 
   remove(id: number) {
     return `This action removes a #${id} userProfile`;

@@ -35,14 +35,12 @@ export class AuthController {
         return this.authService.refreshToken(req.user);
     }
 
-    @UseGuards(JwtGuard)
-    @ApiBearerAuth()
-    @Get(':id/profile')
-    async getUserProfile(@Param('id') user_id: string, @Request() req) {
-        // console.log(req, 'Watch this')
-        return await this.authService.getUserProfile(user_id);
-
-    }
+    // @UseGuards(JwtGuard)
+    // @ApiBearerAuth()
+    // @Get(':id/profile')
+    // async getUserProfile(@Param('id') user_id: string, @Request() req) {
+    //     return await this.authService.getUserProfile(user_id);
+    // }
 
 }
 

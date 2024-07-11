@@ -8,19 +8,6 @@ export class ExceptionLoggerService {
         private readonly drizzleService: DrizzleService,
     ) {}
 
-    // export const exception_logs = pgTable("exception_logs", {
-    //     id: serial('id').primaryKey(),
-    //     user_id: text("user_id"),
-    //     endpoint: text("endpoint"),
-    //     method: text("method"),
-    //     body: json("body"),
-    //     header: json("header"),
-    //     error: text("error"),
-    //     message: text("message"),
-    //     error_code: text("error_code"),
-    //     created_at: timestamp("created_at", { withTimezone: true }).defaultNow(),
-    //     stack_trace: text("stack_trace"),
-    // })
     async exceptionLog(exception: any, request: any): Promise<any> {
 
         let user_id = request?.body?.user_id || request?.headers?.user_id || request?.user?.sub
@@ -49,5 +36,4 @@ export class ExceptionLoggerService {
             stack_trace: exception.stack || '',
         })
     }
-
 }
