@@ -11,6 +11,7 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
 import { HttpModule } from '@nestjs/axios';
 import { ScheduleModule } from '@nestjs/schedule';
 import { CryptoDataModule } from './drizzle/crypto-data-database/drizzle.module';
+import { MasterModule } from './master/master.module';
 import { BitcoinConverterModule } from './bitcoin_converter/bitcoin_converter.module';
 
 
@@ -26,6 +27,7 @@ import { BitcoinConverterModule } from './bitcoin_converter/bitcoin_converter.mo
     HttpModule,
     ScheduleModule.forRoot(),
     CryptoDataModule,
+    MasterModule,
     BitcoinConverterModule
   ],
   controllers: [AppController],
