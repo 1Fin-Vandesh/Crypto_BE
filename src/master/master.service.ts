@@ -4,6 +4,8 @@ import { CreateMasterDto } from './dto/create-master.dto';
 import { UpdateMasterDto } from './dto/update-master.dto';
 import { DrizzleService } from 'src/drizzle/database/drizzle.service';
 import { sql } from 'drizzle-orm';
+import { crypto_master } from 'src/drizzle/migrations/schema';
+import { eq } from 'drizzle-orm';
 @Injectable()
 export class MasterService { 
 
