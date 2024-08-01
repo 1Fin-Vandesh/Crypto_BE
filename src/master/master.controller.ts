@@ -17,6 +17,11 @@ export class MasterController {
     return this.masterService.findAll();
   }
 
+  @Get(':coin')
+  findCoin(@Param('coin') coin:string){
+    return this.masterService.findCryptoCoins(coin);
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.masterService.findOne(+id);
