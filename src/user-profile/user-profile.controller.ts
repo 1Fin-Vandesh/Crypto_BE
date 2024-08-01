@@ -31,4 +31,10 @@ export class UserProfileController {
   remove(@Param('id') id: string) {
     return this.userProfileService.remove(+id);
   }
+
+  @Get('crypto-data-example')
+  async cryptoData() {
+      return await this.userProfileService.cryptoData();
+  }
+
 }

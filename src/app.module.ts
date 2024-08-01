@@ -9,6 +9,8 @@ import { ExceptionLoggerService } from './helpers/exception-logger.service';
 import { ExceptionInterceptor } from './utils/interceptors/exception-interceptor';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { HttpModule } from '@nestjs/axios';
+import { ScheduleModule } from '@nestjs/schedule';
+import { CryptoDataModule } from './drizzle/crypto-data-database/drizzle.module';
 
 
 @Module({
@@ -20,7 +22,9 @@ import { HttpModule } from '@nestjs/axios';
     DrizzleModule,
     AuthModule,
     UserProfileModule,
-    HttpModule
+    HttpModule,
+    ScheduleModule.forRoot(),
+    CryptoDataModule
   ],
   controllers: [AppController],
   providers: [
