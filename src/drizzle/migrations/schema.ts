@@ -1,5 +1,4 @@
-import { pgTable, varchar, unique, bigint, timestamp, integer } from "drizzle-orm/pg-core"
-  import { sql } from "drizzle-orm"
+import { pgTable, varchar, unique, bigint, timestamp, integer, bit } from "drizzle-orm/pg-core"
 
 
 
@@ -20,7 +19,8 @@ export const crypto_master = pgTable("crypto_master", {
 	symbol: varchar("symbol"),
 	slug: varchar("slug"),
 	// TODO: failed to parse database type 'bit(1)'
-	status_code: unknown("status_code"),
+	status_code: integer("status_code"),
+	search_count:integer("search_count")
 },
 (table) => {
 	return {
