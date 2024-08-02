@@ -8,10 +8,9 @@ import { ApiTags } from '@nestjs/swagger';
 export class BitcoinConverterController {
   constructor(private readonly bitcoinConverterService: BitcoinConverterService) {}
 
+  
   @Post('convert_bitcoin')
   bitcoinConverter(@Body() createBitcoinConverterDto: BitcoinConverterDto) {
     return this.bitcoinConverterService.bitcoinConverter(createBitcoinConverterDto);
   }
-
- 
 }

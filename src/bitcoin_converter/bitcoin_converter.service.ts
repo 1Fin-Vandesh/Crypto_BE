@@ -13,10 +13,6 @@ export class BitcoinConverterService {
 
   try{
 
-
-       
-
-
        return bitcoinConverter;
   } 
   catch(e){
