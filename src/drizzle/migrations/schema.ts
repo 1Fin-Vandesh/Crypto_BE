@@ -20,7 +20,7 @@ export const crypto_master = pgTable("crypto_master", {
 	symbol: varchar("symbol"),
 	slug: varchar("slug"),
 	// TODO: failed to parse database type 'bit(1)'
-	status_code: unknown("status_code"),
+	status_code: varchar("status_code"),
 },
 (table) => {
 	return {
