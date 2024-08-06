@@ -1,11 +1,14 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { CreateMasterDto } from './dto/create-master.dto';
 import { UpdateMasterDto } from './dto/update-master.dto';
 import { DrizzleService } from 'src/drizzle/database/drizzle.service';
-import { sql } from 'drizzle-orm';
+import { desc, sql } from 'drizzle-orm';
 import { crypto_master } from 'src/drizzle/migrations/schema';
 import { eq } from 'drizzle-orm';
+import { ApiResponse } from 'src/utils/api-response/api-response';
+import * as schema  from 'src/drizzle/migrations/schema';
+
 @Injectable()
 export class MasterService { 
 
@@ -33,6 +36,30 @@ export class MasterService {
   // }
   // return res
   }
+
+ 
+  //user for getting trending crypto
+  async getTrendingCrypto()
+ {
+  try{
+ 
+  const response= await this.conn.db.select({
+    id: schema.crypto_master.id,
+    cmc_id: schema.crypto_master.cmc_id,
+    title: schema.crypto_master.symbol,
+    price: schema.crypto_master.updated_price ///TODO price column name change
+  })
+  .from(schema.crypto_master)
+  .orderBy(desc(schema.crypto_master.search_count))
+  .limit(3);
+
+  return new ApiResponse(200,"Success",response);
+
+  }catch(e)
+  {  
+    throw new BadRequestException('Bad Request');
+  }
+}
 
  async findCryptoCoins(str:string) {
 
@@ -76,11 +103,15 @@ export class MasterService {
   return res;
   }
 
-  update(id: number, updateMasterDto: UpdateMasterDto) {
+
+
+
+
+update(id: number, updateMasterDto: UpdateMasterDto) {
     return `This action updates a #${id} master`;
   }
 
-  remove(id: number) {
+remove(id: number) {
     return `This action removes a #${id} master`;
-  }
+}
 }
