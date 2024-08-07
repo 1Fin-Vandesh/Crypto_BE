@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { MasterService } from './master.service';
 import { CreateMasterDto } from './dto/create-master.dto';
 import { UpdateMasterDto } from './dto/update-master.dto';
@@ -20,7 +28,7 @@ export class MasterController {
   // }
 
   @Get(':coin/search-crypto')
-  findCoin(@Param('coin') coin:string){
+  findCoin(@Param('coin') coin: string) {
     return this.masterService.findCryptoCoins(coin);
   }
 
@@ -39,16 +47,18 @@ export class MasterController {
     return this.masterService.remove(+id);
   }
 
-
   @Get('trending-crypto')
   getTrendingCrypto() {
     return this.masterService.getTrendingCrypto();
   }
 
-  @Get('')
-  topGainerAndLoser()
-  {
-    return 
+  @Get('top-gainer-loser')
+  topGainerAndLoser() {
+    return this.masterService.topGainerAndLoser();
   }
 
+  @Get('top-currency-token')
+  topDigitalCurrencyToken() {
+    return this.masterService.topDigitalCurrencyToken();
+  }
 }

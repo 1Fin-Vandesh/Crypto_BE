@@ -13,13 +13,13 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { CryptoDataModule } from './drizzle/crypto-data-database/drizzle.module';
 import { MasterModule } from './master/master.module';
 import { BitcoinConverterModule } from './bitcoin_converter/bitcoin_converter.module';
-
+import { MasterGatewayModule } from './master/gateway/master_gateway.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath:'.env',
+      envFilePath: '.env',
     }),
     DrizzleModule,
     AuthModule,
@@ -28,12 +28,13 @@ import { BitcoinConverterModule } from './bitcoin_converter/bitcoin_converter.mo
     ScheduleModule.forRoot(),
     CryptoDataModule,
     MasterModule,
-    BitcoinConverterModule
+    BitcoinConverterModule,
+    MasterGatewayModule,
   ],
   controllers: [AppController],
   providers: [
-    AppService, 
-    ExceptionLoggerService, 
+    AppService,
+    ExceptionLoggerService,
     {
       provide: APP_INTERCEPTOR,
       useClass: ExceptionInterceptor,

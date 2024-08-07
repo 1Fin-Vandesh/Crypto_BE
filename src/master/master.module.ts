@@ -8,6 +8,5 @@ import { HttpModule } from '@nestjs/axios';
   imports: [HttpModule],
   controllers: [MasterController],
   providers: [MasterService, DrizzleService],
-
 })
 export class MasterModule {}
