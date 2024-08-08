@@ -28,4 +28,35 @@ class CreateUserDto {
     password: string;
 }
 
-export { CreateUserDto };
+type SortOrder = 'asc' | 'desc';
+
+class SortingDto {
+
+    @ApiProperty()
+    @IsNotEmpty()
+    @IsString()
+    market_cap_order: SortOrder;
+
+    @ApiProperty()
+    @IsNotEmpty()
+    @IsString()
+    "24h_change_order": SortOrder;
+
+    @ApiProperty()
+    @IsNotEmpty()
+    @IsString()
+    "7D_change_order": SortOrder;
+
+    @ApiProperty()
+    @IsNotEmpty()
+    @IsString()
+    "1M_change_order": SortOrder;
+
+    @ApiProperty()
+    @IsNotEmpty()
+    @IsString()
+    "1Y_change_order": SortOrder;
+}
+
+
+export { CreateUserDto, SortingDto };

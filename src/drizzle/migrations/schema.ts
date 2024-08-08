@@ -3,13 +3,12 @@ import {
   serial,
   numeric,
   timestamp,
-  unique,
-  bigint,
   integer,
   varchar,
+  unique,
+  bigint,
   boolean,
 } from 'drizzle-orm/pg-core';
-import { sql } from 'drizzle-orm';
 
 export const ape = pgTable('ape', {
   id: serial('id').primaryKey().notNull(),
@@ -76,34 +75,6 @@ export const ckb = pgTable('ckb', {
   real_volume: numeric('real_volume'),
   date: timestamp('date', { withTimezone: true, mode: 'string' }),
 });
-
-export const _crypto_master = pgTable(
-  '_crypto_master',
-  {
-    // You can use { mode: "bigint" } if numbers are exceeding js number limitations
-    id: bigint('id', { mode: 'number' }).primaryKey().notNull(),
-    cmc_id: integer('cmc_id').notNull(),
-    name: varchar('name'),
-    symbol: varchar('symbol'),
-    slug: varchar('slug'),
-    search_count: integer('search_count').default(0),
-    icr_score: integer('icr_score'),
-    updated_price: numeric('updated_price'),
-    is_active: boolean('is_active').default(false),
-    created_at: timestamp('created_at', { withTimezone: true, mode: 'string' })
-      .defaultNow()
-      .notNull(),
-    updated_at: timestamp('updated_at', { withTimezone: true, mode: 'string' })
-      .defaultNow()
-      .notNull(),
-    category_code: integer('category_code'),
-  },
-  (table) => {
-    return {
-      crypto_master_cmc_id: unique('crypto_master_cmc_id').on(table.cmc_id),
-    };
-  },
-);
 
 export const curve = pgTable('curve', {
   id: serial('id').primaryKey().notNull(),
@@ -305,6 +276,43 @@ export const jito_governance_token = pgTable('jito_governance_token', {
   date: timestamp('date', { withTimezone: true, mode: 'string' }),
 });
 
+export const _crypto_master = pgTable(
+  '_crypto_master',
+  {
+    // You can use { mode: "bigint" } if numbers are exceeding js number limitations
+    id: bigint('id', { mode: 'number' }).primaryKey().notNull(),
+    cmc_id: integer('cmc_id').notNull(),
+    name: varchar('name'),
+    symbol: varchar('symbol'),
+    slug: varchar('slug'),
+    search_count: integer('search_count').default(0),
+    icr_score: integer('icr_score'),
+    updated_price: numeric('updated_price'),
+    is_active: boolean('is_active').default(false),
+    created_at: timestamp('created_at', { withTimezone: true, mode: 'string' })
+      .defaultNow()
+      .notNull(),
+    updated_at: timestamp('updated_at', { withTimezone: true, mode: 'string' })
+      .defaultNow()
+      .notNull(),
+    category_code: integer('category_code'),
+    percent_change_1h: numeric('percent_change_1h'),
+    percent_change_24h: numeric('percent_change_24h'),
+    percent_change_7d: numeric('percent_change_7d'),
+    percent_change_30d: numeric('percent_change_30d'),
+    percent_change_1year: numeric('percent_change_1year'),
+    volume_24h: numeric('volume_24h'),
+    market_cap: numeric('market_cap'),
+    total_supply: numeric('total_supply'),
+    circulating_supply: numeric('circulating_supply'),
+  },
+  (table) => {
+    return {
+      crypto_master_cmc_id: unique('crypto_master_cmc_id').on(table.cmc_id),
+    };
+  },
+);
+
 export const lunc = pgTable('lunc', {
   id: serial('id').primaryKey().notNull(),
   open: numeric('open'),
@@ -371,7 +379,7 @@ export const optimism = pgTable('optimism', {
   date: timestamp('date', { withTimezone: true, mode: 'string' }),
 });
 
-export const Oneinch = pgTable('1inch', {
+export const one_inch = pgTable('1inch', {
   id: serial('id').primaryKey().notNull(),
   open: numeric('open'),
   high: numeric('high'),
@@ -644,7 +652,7 @@ export const constitutiondao = pgTable('constitutiondao', {
   }).defaultNow(),
 });
 
-export const Zerox = pgTable('0x', {
+export const zero_x = pgTable('0x', {
   id: serial('id').primaryKey().notNull(),
   open: numeric('open'),
   high: numeric('high'),

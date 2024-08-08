@@ -6,8 +6,7 @@ export default defineConfig ({
   dialect: 'postgresql',
   dbCredentials: {
     // TODO: connection limit and pooling config to be added
-    url: process.env.CRYPTO_DATA_DATABASE_URL,
-
+    url: process.env.DB_URL
   },
   introspect: {
     casing: 'preserve',
