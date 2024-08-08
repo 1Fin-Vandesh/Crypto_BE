@@ -3,8 +3,8 @@ import { HttpService } from '@nestjs/axios';
 import { CreateMasterDto } from './dto/create-master.dto';
 import { UpdateMasterDto } from './dto/update-master.dto';
 import { DrizzleService } from 'src/drizzle/database/drizzle.service';
-import { asc, desc, sql } from 'drizzle-orm';
-import { crypto_master } from 'src/drizzle/migrations/schema';
+import { asc, count, desc, sql } from 'drizzle-orm';
+import { _crypto_master } from 'src/drizzle/migrations/schema';
 import { eq } from 'drizzle-orm';
 import { ApiResponse } from 'src/utils/api-response/api-response';
 import * as schema from 'src/drizzle/migrations/schema';
@@ -41,13 +41,13 @@ export class MasterService {
     try {
       const response = await this.conn.db
         .select({
-          id: schema.crypto_master.id,
-          cmc_id: schema.crypto_master.cmc_id,
-          title: schema.crypto_master.symbol,
-          price: schema.crypto_master.updated_price, ///TODO price column name change
+          id: schema._crypto_master.id,
+          cmc_id: schema._crypto_master.cmc_id,
+          title: schema._crypto_master.symbol,
+          price: schema._crypto_master.updated_price, ///TODO price column name change
         })
-        .from(schema.crypto_master)
-        .orderBy(desc(schema.crypto_master.search_count))
+        .from(schema._crypto_master)
+        .orderBy(desc(schema._crypto_master.search_count))
         .limit(3);
 
       return new ApiResponse(200, 'Success', response);
@@ -63,26 +63,26 @@ export class MasterService {
       const [top_gainer, top_loser] = await Promise.all([
         this.conn.db
           .select({
-            id: schema.crypto_master.id,
-            cmc_id: schema.crypto_master.cmc_id,
-            symbol: schema.crypto_master.symbol,
-            name: schema.crypto_master.name,
-            price: schema.crypto_master.updated_price,
+            id: schema._crypto_master.id,
+            cmc_id: schema._crypto_master.cmc_id,
+            symbol: schema._crypto_master.symbol,
+            name: schema._crypto_master.name,
+            price: schema._crypto_master.updated_price,
           })
-          .from(schema.crypto_master)
-          .orderBy(desc(schema.crypto_master.updated_price))
+          .from(schema._crypto_master)
+          .orderBy(desc(schema._crypto_master.updated_price))
           .limit(3),
 
         this.conn.db
           .select({
-            id: schema.crypto_master.id,
-            cmc_id: schema.crypto_master.cmc_id,
-            symbol: schema.crypto_master.symbol,
-            name: schema.crypto_master.name,
-            price: schema.crypto_master.updated_price,
+            id: schema._crypto_master.id,
+            cmc_id: schema._crypto_master.cmc_id,
+            symbol: schema._crypto_master.symbol,
+            name: schema._crypto_master.name,
+            price: schema._crypto_master.updated_price,
           })
-          .from(schema.crypto_master)
-          .orderBy(asc(schema.crypto_master.updated_price))
+          .from(schema._crypto_master)
+          .orderBy(asc(schema._crypto_master.updated_price))
           .limit(3),
       ]);
 
@@ -97,14 +97,14 @@ export class MasterService {
     try {
       const top_currency_token = await this.conn.db
         .select({
-          id: schema.crypto_master.id,
-          cmc_id: schema.crypto_master.cmc_id,
-          symbol: schema.crypto_master.symbol,
-          name: schema.crypto_master.name,
-          icr_score: schema.crypto_master.icr_score,
+          id: schema._crypto_master.id,
+          cmc_id: schema._crypto_master.cmc_id,
+          symbol: schema._crypto_master.symbol,
+          name: schema._crypto_master.name,
+          icr_score: schema._crypto_master.icr_score,
         })
-        .from(schema.crypto_master)
-        .orderBy(desc(schema.crypto_master.icr_score))
+        .from(schema._crypto_master)
+        .orderBy(desc(schema._crypto_master.icr_score))
         .limit(3);
 
       return new ApiResponse(200, 'Success', { top_currency_token });
@@ -144,8 +144,8 @@ export class MasterService {
 
     let data = await this.conn.db
       .select()
-      .from(crypto_master)
-      .where(eq(crypto_master.cmc_id, id));
+      .from(_crypto_master)
+      .where(eq(_crypto_master.cmc_id, id));
 
     if (data.length > 0) {
       data = await this?.conn.db.execute(
@@ -168,6 +168,20 @@ export class MasterService {
     );
 
   return new ApiResponse(200, 'Success', response);
+  }
+
+  /**
+   * Rahul
+   * @returns total cryptos coins
+   */
+
+  async GetAllCoins(){
+   let data=await this.conn.db.select({ count: count() }).from(_crypto_master).where(eq(_crypto_master.is_active, true));
+   if(data.length>0){
+    return new ApiResponse(200, 'Success',data); 
+   } else{
+    return new ApiResponse(404, 'Data not found',data);
+   }
   }
 
 
