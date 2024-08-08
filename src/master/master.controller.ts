@@ -11,6 +11,7 @@ import { MasterService } from './master.service';
 import { CreateMasterDto } from './dto/create-master.dto';
 import { UpdateMasterDto } from './dto/update-master.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { GlobalSearchDto } from './dto/global_search.dto';
 
 @ApiTags('Master')
 @Controller('master')
@@ -52,13 +53,23 @@ export class MasterController {
     return this.masterService.getTrendingCrypto();
   }
 
-  @Get('top-gainer-loser')
-  topGainerAndLoser() {
-    return this.masterService.topGainerAndLoser();
+  @Get('top-gainer')
+  topGainerCryptos() {
+    return this.masterService.topGainerCryptos();
+  }
+
+  @Get('top-loser')
+  topLoserCryptos() {
+    return this.masterService.topLoserCryptos();
   }
 
   @Get('top-currency-token')
   topDigitalCurrencyToken() {
     return this.masterService.topDigitalCurrencyToken();
+  }
+
+  @Get('global-search/:search_str/:search_state')
+  globalSearch(@Param() globalSearchDto: GlobalSearchDto) {
+    return this.masterService.globalSearch(globalSearchDto);
   }
 }

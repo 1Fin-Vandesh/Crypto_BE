@@ -1,4 +1,5 @@
 import {
+  MessageBody,
   OnGatewayConnection,
   OnGatewayDisconnect,
   WebSocketGateway,
@@ -29,8 +30,13 @@ export class TopGainerLoserWebsocketGateWay
     console.log(`Client Connected: ${client.id}`);
   }
 
-  async sendTopGainersAndLosers() {
-    const response = await this.masterService.topGainerAndLoser();
-    this.server.emit('topGainersAndLosers', response);
+  async sendTopGainersSocket() {
+    const response = await this.masterService.topGainerCryptos();
+    this.server.emit('topGainersSocket', response);
+  }
+
+  async sendTopLoserSocket() {
+    const response = await this.masterService.topGainerCryptos();
+    this.server.emit('topGainersSocket', response);
   }
 }

@@ -4,11 +4,11 @@ import { CreateMasterDto } from './dto/create-master.dto';
 import { UpdateMasterDto } from './dto/update-master.dto';
 import { DrizzleService } from 'src/drizzle/database/drizzle.service';
 import { asc, desc, sql } from 'drizzle-orm';
-import { crypto_master } from 'src/drizzle/migrations/schema';
+import { _crypto_master } from 'src/drizzle/migrations/schema';
 import { eq } from 'drizzle-orm';
 import { ApiResponse } from 'src/utils/api-response/api-response';
 import * as schema from 'src/drizzle/migrations/schema';
-import { TopGainerLoserWebsocketGateWay } from './gateway/top_gainer_loser_websocket.gateway';
+import { GlobalSearchDto } from './dto/global_search.dto';
 
 @Injectable()
 export class MasterService {
@@ -41,13 +41,13 @@ export class MasterService {
     try {
       const response = await this.conn.db
         .select({
-          id: schema.crypto_master.id,
-          cmc_id: schema.crypto_master.cmc_id,
-          title: schema.crypto_master.symbol,
-          price: schema.crypto_master.updated_price, ///TODO price column name change
+          id: schema._crypto_master.id,
+          cmc_id: schema._crypto_master.cmc_id,
+          title: schema._crypto_master.symbol,
+          price: schema._crypto_master.updated_price, ///TODO price column name change
         })
-        .from(schema.crypto_master)
-        .orderBy(desc(schema.crypto_master.search_count))
+        .from(schema._crypto_master)
+        .orderBy(desc(schema._crypto_master.search_count))
         .limit(3);
 
       return new ApiResponse(200, 'Success', response);
@@ -56,37 +56,99 @@ export class MasterService {
     }
   }
 
-  //Top gainer and top loser
-  async topGainerAndLoser() {
+  //Top gainer Cryptos
+  async topGainerCryptos() {
     try {
       // Execute both queries in parallel
-      const [top_gainer, top_loser] = await Promise.all([
-        this.conn.db
-          .select({
-            id: schema.crypto_master.id,
-            cmc_id: schema.crypto_master.cmc_id,
-            symbol: schema.crypto_master.symbol,
-            name: schema.crypto_master.name,
-            price: schema.crypto_master.updated_price,
-          })
-          .from(schema.crypto_master)
-          .orderBy(desc(schema.crypto_master.updated_price))
-          .limit(3),
+      const top_gainer = await this.conn.db
+        .select({
+          id: schema._crypto_master.id,
+          cmc_id: schema._crypto_master.cmc_id,
+          symbol: schema._crypto_master.symbol,
+          name: schema._crypto_master.name,
+          price: schema._crypto_master.updated_price,
+          slug: schema._crypto_master.slug,
+          percent_change_24h: schema._crypto_master.updated_price, //TODO: update coloum name
+        })
+        .from(schema._crypto_master)
+        .where(eq(schema._crypto_master.is_active, true))
+        .orderBy(desc(schema._crypto_master.updated_price))
+        .limit(3);
 
-        this.conn.db
-          .select({
-            id: schema.crypto_master.id,
-            cmc_id: schema.crypto_master.cmc_id,
-            symbol: schema.crypto_master.symbol,
-            name: schema.crypto_master.name,
-            price: schema.crypto_master.updated_price,
-          })
-          .from(schema.crypto_master)
-          .orderBy(asc(schema.crypto_master.updated_price))
-          .limit(3),
-      ]);
+      const results = [];
 
-      return new ApiResponse(200, 'Success', { top_gainer, top_loser });
+      for (const gainer of top_gainer) {
+        const { slug } = gainer;
+
+        const tableName = slug.replaceAll('-', '_');
+
+        // Execute the query
+        const coinData = await this?.conn.db.execute(
+          sql`SELECT volume,price,time_interval,percent_change_24h FROM "${sql.raw(tableName)}" ORDER BY time_interval DESC limit 288`,
+        );
+
+        const gainerChange = {
+          ...gainer,
+          percent_change_24h: coinData[0].percent_change_24h,
+        };
+
+        // Add top gainer with related data to results
+        results.push({
+          top_gainer: gainerChange,
+          graph_value: coinData,
+        });
+      }
+
+      return new ApiResponse(200, 'Success', results);
+    } catch (e) {
+      throw new BadRequestException('Bad Request');
+    }
+  }
+
+  //Top Loser Cryptos
+  async topLoserCryptos() {
+    try {
+      // Execute both queries in parallel
+      const top_loser = await this.conn.db
+        .select({
+          id: schema._crypto_master.id,
+          cmc_id: schema._crypto_master.cmc_id,
+          symbol: schema._crypto_master.symbol,
+          name: schema._crypto_master.name,
+          price: schema._crypto_master.updated_price,
+          slug: schema._crypto_master.slug,
+          percent_change_24h: schema._crypto_master.updated_price, //TODO: update coloum name
+        })
+        .from(schema._crypto_master)
+        .where(eq(schema._crypto_master.is_active, true))
+        .orderBy(asc(schema._crypto_master.updated_price))
+        .limit(3);
+
+      const results = [];
+
+      for (const loser of top_loser) {
+        const { slug } = loser;
+
+        const tableName = slug.replaceAll('-', '_');
+
+        // Execute the query
+        const coinData = await this?.conn.db.execute(
+          sql`SELECT volume,price,time_interval,percent_change_24h FROM "${sql.raw(tableName)}" ORDER BY time_interval DESC limit 288`,
+        );
+
+        const loserChange = {
+          ...loser,
+          percent_change_24h: coinData[0].percent_change_24h,
+        };
+
+        // Add top gainer with related data to results
+        results.push({
+          top_loser: loserChange,
+          graph_value: coinData,
+        });
+      }
+
+      return new ApiResponse(200, 'Success', results);
     } catch (e) {
       throw new BadRequestException('Bad Request');
     }
@@ -97,14 +159,14 @@ export class MasterService {
     try {
       const top_currency_token = await this.conn.db
         .select({
-          id: schema.crypto_master.id,
-          cmc_id: schema.crypto_master.cmc_id,
-          symbol: schema.crypto_master.symbol,
-          name: schema.crypto_master.name,
-          icr_score: schema.crypto_master.icr_score,
+          id: schema._crypto_master.id,
+          cmc_id: schema._crypto_master.cmc_id,
+          symbol: schema._crypto_master.symbol,
+          name: schema._crypto_master.name,
+          icr_score: schema._crypto_master.icr_score,
         })
-        .from(schema.crypto_master)
-        .orderBy(desc(schema.crypto_master.icr_score))
+        .from(schema._crypto_master)
+        .orderBy(desc(schema._crypto_master.icr_score))
         .limit(3);
 
       return new ApiResponse(200, 'Success', { top_currency_token });
@@ -144,8 +206,8 @@ export class MasterService {
 
     let data = await this.conn.db
       .select()
-      .from(crypto_master)
-      .where(eq(crypto_master.cmc_id, id));
+      .from(_crypto_master)
+      .where(eq(_crypto_master.cmc_id, id));
 
     if (data.length > 0) {
       data = await this?.conn.db.execute(
@@ -158,6 +220,32 @@ export class MasterService {
     }
     res.data = data;
     return res;
+  }
+
+  //global search
+  async globalSearch(globalSearchDto: GlobalSearchDto) {
+    switch (globalSearchDto.search_state) {
+      case 'All':
+      // return this.allDataRepository.find({
+      //   where: { search_field: search_str }, // Replace search_field with the actual field name
+      // });
+
+      case 'Crypto':
+        const crypto = await this.conn.db
+          .select({ name: schema._crypto_master.name })
+          .from(schema._crypto_master)
+          .where(
+            sql`${schema._crypto_master.name} ILIKE ${sql.raw(`'%${globalSearchDto.search_str}%'`)}`,
+          );
+        return new ApiResponse(200, 'Success', { crypto });
+
+      case 'Blogs':
+      case 'News':
+      case 'Modules':
+
+      default:
+        throw new BadRequestException('Invalid Search State');
+    }
   }
 
   update(id: number, updateMasterDto: UpdateMasterDto) {
