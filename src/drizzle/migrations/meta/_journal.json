@@ -22,6 +22,13 @@
       "when": 1717996762149,
       "tag": "0002_Added_API_Exception_logs_Table",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1723114127056,
+      "tag": "0003_Initial_Migration",
+      "breakpoints": true
     }
   ]
 }
