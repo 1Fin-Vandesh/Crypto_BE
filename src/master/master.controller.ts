@@ -66,9 +66,14 @@ export class MasterController {
    // RahulYadav:Get All Crypto Categories
    */
   
-  @Get('crypto-categories')
+   
+   /**
+    * @returns Total Numbers of coins
+    */
+
+  @Get('total-coins')
   GetAllCategories(){
-    return this.masterService
+    return this.masterService.GetAllCoins();
   }
 
 }
