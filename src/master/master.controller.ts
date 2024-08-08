@@ -61,4 +61,14 @@ export class MasterController {
   topDigitalCurrencyToken() {
     return this.masterService.topDigitalCurrencyToken();
   }
+
+   /*
+   // RahulYadav:Get All Crypto Categories
+   */
+  
+  @Get('crypto-categories')
+  GetAllCategories(){
+    return this.masterService
+  }
+
 }

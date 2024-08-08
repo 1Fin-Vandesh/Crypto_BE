@@ -160,6 +160,17 @@ export class MasterService {
     return res;
   }
 
+
+  async GetAllCryptoCategories(){
+   
+    let response = await this?.conn.db.execute(
+      sql`select * from public.fn_update_search_count()`,
+    );
+
+  return new ApiResponse(200, 'Success', response);
+  }
+
+
   update(id: number, updateMasterDto: UpdateMasterDto) {
     return `This action updates a #${id} master`;
   }
@@ -167,4 +178,6 @@ export class MasterService {
   remove(id: number) {
     return `This action removes a #${id} master`;
   }
+
+
 }
