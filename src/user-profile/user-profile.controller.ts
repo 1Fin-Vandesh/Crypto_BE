@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Request } from '@nestjs/common';
 import { UserProfileService } from './user-profile.service';
-import { CreateUserDto } from './dto/user-profile.dto';
+import { CreateUserDto, SortingDto } from './dto/user-profile.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { JwtGuard } from 'src/auth/guards/jwt-auth.guard';
 // import { UpdateUserProfileDto } from './dto/update-user-profile.dto';
@@ -35,6 +35,11 @@ export class UserProfileController {
   @Get('crypto-data-example')
   async cryptoData() {
       return await this.userProfileService.cryptoData();
+  }
+
+  @Get('listing-example')
+  async getListing(sortingDto: SortingDto) {
+    return await this.userProfileService.getListing(sortingDto);
   }
 
 }

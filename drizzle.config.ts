@@ -1,12 +1,12 @@
 import { defineConfig } from 'drizzle-kit';
 
 export default defineConfig ({
-  schema: './src/drizzle/schema/*.ts',
+  schema: ['./src/drizzle/migrations/schema.ts'],
   out: './src/drizzle/migrations',
   dialect: 'postgresql',
   dbCredentials: {
     // TODO: connection limit and pooling config to be added
-    url: process.env.DATABASE_URL,
+    url: process.env.CRYPTO_DATA_DATABASE_URL,
 
   },
   introspect: {
