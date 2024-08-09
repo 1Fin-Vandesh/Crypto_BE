@@ -33,7 +33,7 @@ export class MasterController {
     return this.masterService.findCryptoCoins(coin);
   }
 
-  @Get(':id/search-count-increase')
+  @Get('search-count-increase/:id')
   findOne(@Param('id') id: string) {
     return this.masterService.findOne(+id);
   }
@@ -63,13 +63,18 @@ export class MasterController {
     return this.masterService.topLoserCryptos();
   }
 
-  @Get('top-currency-token')
-  topDigitalCurrencyToken() {
-    return this.masterService.topDigitalCurrencyToken();
+  @Get('top-currency-token/:category_code')
+  topDigitalCurrencyToken(@Param('category_code') category_code: number) {
+    return this.masterService.topDigitalCurrencyToken(category_code);
   }
 
   @Get('global-search/:search_str/:search_state')
   globalSearch(@Param() globalSearchDto: GlobalSearchDto) {
     return this.masterService.globalSearch(globalSearchDto);
+  }
+
+  @Get('categories')
+  loadCategories() {
+    return this.masterService.loadCategories();
   }
 }
